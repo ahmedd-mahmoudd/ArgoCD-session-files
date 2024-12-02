@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MySecret:
+    Type: "AWS::SecretsManager::Secret"
+    Properties: 
+      Name: "My-First-SM-Secret"
+      SecretString: !Sub |
+        {
+          "username": "AhmedMahmoud",
+          "password": "NotPassword!"
+        }
+  AWSSMUser:
+    Type: "AWS::IAM::User"
+    Properties:
+      UserName: "awssm-k8s-user"
+
+  SMReadPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "AWSSM-Read-Policy"
+      Users: 
+        - !Ref AWSSMUser
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Action: 
+              - "secretsmanager:GetRandomPassword"
+              - "secretsmanager:GetResourcePolicy"
+              - "secretsmanager:GetSecretValue"
+              - "secretsmanager:DescribeSecret"
+              - "secretsmanager:ListSecretVersionIds"
+              - "secretsmanager:ListSecrets"
+              - "secretsmanager:BatchGetSecretValue"
+            Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:*"
+
+Outputs:
+  SecretARN:
+    Description: "The ARN of the created secret"
+    Value: !Ref MySecret
+  IAMUserName:
+    Description: "The name of the created IAM user"
+    Value: !Ref AWSSMUser
