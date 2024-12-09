@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'https://github.com/ahmedd-mahmoudd/ArgoCD-session-files.git' 
     targetRevision: HEAD
-    path: 'Kubescape/nginx-unsecured.yaml' 
+    path: './Kubescape' 
   project: default
   syncPolicy:
     automated:
