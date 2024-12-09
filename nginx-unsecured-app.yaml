@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-unsecured
+  namespace: argocd
+spec:
+  destination:
+    namespace: default # Change to the target namespace
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: 'https://github.com/ahmedd-mahmoudd/ArgoCD-session-files.git' 
+    targetRevision: HEAD
+    path: 'Kubescape/nginx-unsecured.yaml' 
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
